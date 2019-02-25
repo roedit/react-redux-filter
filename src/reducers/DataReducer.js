@@ -1,9 +1,11 @@
 import { fromJS } from 'immutable';
 import createFilters from '../CreateFilters';
+import _ from 'lodash';
 
 const data = require('../data.json');
 const { projects, assignee, categories } = createFilters(data);
 const initialState = fromJS({
+    data: JSON.parse(JSON.stringify(data)),
     tickets: data,
     projects: projects,
     assignee: assignee,
@@ -16,40 +18,58 @@ const initialState = fromJS({
 })
 
 function filterData(state, type) {
-    let filteredData = JSON.parse(JSON.stringify(data));
+    let dataToFilter = JSON.parse(JSON.stringify(data));
+    let projectsFiltered = [];
+    let assigneeFiltered = [];
+    let categoriesFiltered = [];
+    let hasProjectsFilter = false;
+    let hasAssigneeFilter = false;
+    let hasCategoriesFilter = false;
 
-    if(type === 'add') {
-        filteredData = JSON.parse(JSON.stringify(state.tickets));
+    if(state.projectsFilterTerms.length > 0) {
+        hasProjectsFilter = true;
+        projectsFiltered = dataToFilter.filter(ticket => state.projectsFilterTerms.indexOf(ticket.project) !== -1)
     }
 
-    let iooi = filteredData.filter(ticket => {
-        let inProjects = false;
-        let inAssignee = false;
-        let inCategories = false;        
+    if(state.assigneeFilterTerms.length > 0) {
+        hasAssigneeFilter = true;
+        assigneeFiltered = dataToFilter.filter(ticket => state.assigneeFilterTerms.indexOf(ticket.assignee) !== -1)
+    }
 
-        if(state.projectsFilterTerms.length === 0 && 
-           state.assigneeFilterTerms.length === 0 && 
-           state.categoriesFilterTerms.length === 0) {
-            return true;
-        }
+    if(state.categoriesFilterTerms.length > 0) {
+        hasCategoriesFilter = true;
+        categoriesFiltered = dataToFilter.filter(ticket => state.categoriesFilterTerms.indexOf(ticket.category) !== -1)
+    }
 
-        if(state.projectsFilterTerms.length > 0) {
-            inProjects = state.projectsFilterTerms.indexOf(ticket.project) !== -1
-        }
-        
-        if(state.assigneeFilterTerms.length > 0) {
-            inAssignee = state.assigneeFilterTerms.indexOf(ticket.assignee) !== -1
-        }
-        
-        if(state.categoriesFilterTerms.length > 0) {
-            inCategories = state.categoriesFilterTerms.indexOf(ticket.category) !== -1
-        }
+    if(hasProjectsFilter && hasAssigneeFilter && hasCategoriesFilter) {
+        return _.intersection(_.intersection(projectsFiltered, assigneeFiltered), categoriesFiltered);
+    }
 
-        return inProjects || inAssignee || inCategories;
-    })
+    if(hasProjectsFilter && hasAssigneeFilter) {
+        return _.intersection(projectsFiltered, assigneeFiltered);
+    }
 
-    console.log(iooi);
-    return iooi;
+    if(hasProjectsFilter && hasCategoriesFilter) {
+        return _.intersection(projectsFiltered, categoriesFiltered);
+    }
+
+    if(hasCategoriesFilter && hasAssigneeFilter) {
+        return _.intersection(categoriesFiltered, assigneeFiltered);
+    }
+
+    if(hasProjectsFilter) {
+        return projectsFiltered;
+    }
+    
+    if(hasAssigneeFilter) {
+        return assigneeFiltered;
+    }
+    
+    if(hasCategoriesFilter) {
+        return categoriesFiltered;
+    }
+
+    return dataToFilter
 }
 
 export default function(state = initialState, action) {
@@ -74,22 +94,22 @@ export default function(state = initialState, action) {
         }
 
         case 'PROJECTS_TERM_FILTER': {
-            stateJS.projectsFilterTerms = action.payload.searchTerms
-            stateJS.tickets = filterData(stateJS, action.payload.type);
+            stateJS.projectsFilterTerms = action.payload
+            stateJS.tickets = filterData(stateJS);
 
             return fromJS(stateJS);
         }
 
         case 'ASSIGNEE_TERM_FILTER': {
-            stateJS.assigneeFilterTerms = action.payload.searchTerms
-            stateJS.tickets = filterData(stateJS, action.payload.type);
+            stateJS.assigneeFilterTerms = action.payload
+            stateJS.tickets = filterData(stateJS);
 
             return fromJS(stateJS);
         }
 
         case 'CATEGORIES_TERM_FILTER': {
-            stateJS.categoriesFilterTerms = action.payload.searchTerms
-            stateJS.tickets = filterData(stateJS, action.payload.type);
+            stateJS.categoriesFilterTerms = action.payload
+            stateJS.tickets = filterData(stateJS);
 
             return fromJS(stateJS);
         }

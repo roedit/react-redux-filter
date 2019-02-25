@@ -42,7 +42,7 @@ class TrackerFilter extends Component {
             let itemIndexProject = filtersProject.indexOf(item.label)
             itemIndexProject === -1 ? filtersProject.push(item.label) : filtersProject.splice(itemIndexProject, 1)
             
-            this.props.filterProjects(filtersProject, itemIndexProject === -1 ? 'add' : 'remove');
+            this.props.filterProjects(filtersProject);
             break;
             
             case "assignee": 
@@ -50,7 +50,7 @@ class TrackerFilter extends Component {
             let itemIndexAssignee = filtersAssignee.indexOf(item.label)
             itemIndexAssignee === -1 ? filtersAssignee.push(item.label) : filtersAssignee.splice(itemIndexAssignee, 1)
             
-            this.props.filterAssignee(filtersAssignee, itemIndexAssignee === -1 ? 'add' : 'remove');
+            this.props.filterAssignee(filtersAssignee);
             break;
             
             case "categories": 
@@ -58,7 +58,7 @@ class TrackerFilter extends Component {
             let itemIndexCategories = filtersCategories.indexOf(item.label)
             itemIndexCategories === -1 ? filtersCategories.push(item.label) : filtersCategories.splice(itemIndexCategories, 1)
             
-            this.props.filterCategories(filtersCategories, itemIndexCategories === -1 ? 'add' : 'remove');
+            this.props.filterCategories(filtersCategories);
             break;
 
             default:
