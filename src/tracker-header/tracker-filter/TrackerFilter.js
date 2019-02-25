@@ -64,6 +64,10 @@ class TrackerFilter extends Component {
             default:
             break;
         }
+
+        this.setState(prevState => ({
+            list: this.props.data
+        }))
     }
 
     filterData(searchTerm) {
@@ -97,7 +101,6 @@ class TrackerFilter extends Component {
         }
 
         this.setState(prevState => ({
-            active: !prevState.active,
             list: this.props.data
         }))
     }
@@ -109,10 +112,16 @@ class TrackerFilter extends Component {
 
         return (
             <ul className={styles.dropdown}>
-                <h4 className={styles.dropdownTitle}
-                    onClick={() => this.resetSelection}>
-                    Filter by {this.props.title.toLowerCase()}
-                </h4>
+                <div className={styles.dropdownTitleHolder}>
+                    <h4 className={styles.dropdownTitle}
+                        onClick={() => this.resetSelection}>
+                        Filter by {this.props.title.toLowerCase()}
+                    </h4>
+                    <Icon className={styles.close} onClick={() => this.props.closeFilter()}
+                          name="close"
+                          color="black"
+                          size="small"/>
+                </div>
                 <div className={styles.dropdownInputHolder}
                      onClick={e => e.stopPropagation()}>
                     <input type="text"
