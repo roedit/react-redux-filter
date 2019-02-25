@@ -1,0 +1,40 @@
+.trackerList {
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    border-left: 1px solid #e1e4e8;
+    border-right: 1px solid #e1e4e8;
+    list-style-type: none;
+}
+
+.ticket {
+    position: relative;
+    display: grid;
+    margin: 0;
+    padding: 10px 50px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.ticket:hover {
+    background-color: #f6f8fa;
+}
+
+.title {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+}
+
+.subtitle {
+    margin: 4px 0;
+    padding: 0;
+    font-size: 12px;
+    color: #586069;
+}
+
+.status {
+    position: absolute;
+    top: 12px;
+    left: 25px;
+}

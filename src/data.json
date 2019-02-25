@@ -1,0 +1,98 @@
+[
+	{
+		"id": "001",
+		"description": "Make the logo bigger",
+		"category": "Front end",
+		"project": "Top bar redesign",
+        "status": "closed",
+		"assignee": "Andy"
+	},
+	{
+		"id": "002",
+		"description": "Run more frequent data imports",
+		"category": "Data",
+		"project": "Data imports",
+        "status": "opened",
+		"assignee": "Farouk"
+	},
+	{
+		"id": "003",
+		"description": "Create new email designs",
+		"category": "Design",
+		"project": "Email",
+        "status": "closed",
+		"assignee": "Elia"
+	},
+	{
+		"id": "004",
+		"description": "Decide on email copy",
+		"category": "Copy",
+		"project": "Email",
+        "status": "opened",
+		"assignee": "Naaman"
+	},
+	{
+		"id": "005",
+		"description": "Move image assets into a sprite",
+		"category": "Front end",
+		"project": "Top bar redesign",
+        "status": "opened",
+		"assignee": "Ross"
+	},
+	{
+		"id": "006",
+		"description": "OCR filings documents",
+		"category": "Data",
+		"project": "Data imports",
+        "status": "closed",
+		"assignee": "Ross"
+	},
+	{
+		"id": "007",
+		"description": "Fix javascript error in IE8",
+		"category": "Front end",
+		"project": "Bug fixes",
+        "status": "opened",
+		"assignee": "Andy"
+	},
+	{
+		"id": "008",
+		"description": "Fix GTM",
+		"category": "Analytics",
+		"project": null,
+        "status": "closed",
+		"assignee": "Sam"
+	},
+	{
+		"id": "009",
+		"description": "Bring new URL datasets onto companies",
+		"category": "Data",
+		"project": "URL Data",
+        "status": "closed",
+		"assignee": "Nagarjuna"
+	},
+	{
+		"id": "010",
+		"description": "Fix CSS z-index error on plans page",
+		"category": "Front end",
+        "project": "Bug fixes",
+        "status": "opened",
+		"assignee": "Pablo"
+	},
+	{
+		"id": "011",
+		"description": "Migrate to Webpack",
+		"category": "Front end",
+		"project": null,
+        "status": "opened",
+		"assignee": "Pablo"
+	},
+	{
+		"id": "012",
+		"description": "Onboard international company data",
+		"category": "Data",
+		"project": "International",
+        "status": "opened",
+		"assignee": "Nagarjuna"
+	}
+]

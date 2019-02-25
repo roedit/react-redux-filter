@@ -1,0 +1,92 @@
+.trackerFilter {
+    position: relative;
+}
+
+.filterLabel {
+    display: flex;
+    align-content: center;
+    line-height: 24px;
+    padding: 13px 15px;
+    text-transform: capitalize;
+}
+
+.filterLabel:hover {
+    cursor: pointer;
+}
+
+.dropdown {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    background-color: #f6f8fa;
+    border: 1px solid rgba(27, 31, 35, .15);
+    border-radius: 3px;
+    box-shadow: 0 3px 12px rgba(27, 31, 35, .15);
+    color: #586069;
+    font-size: 12px;
+    overflow: hidden;
+    width: 300px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dropdownTitle {
+    margin: 0;
+    padding: 10px 15px;
+    color: #24292e;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.dropdownInputHolder {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.dropdownInput {
+    border: 1px solid #dfe2e5;
+    border-radius: 3px;
+    display: block;
+    max-width: 100%;
+    padding: 5px;
+    width: calc(100% - 10px);
+}
+
+.dropdownOptions {
+    background-color: #ffffff;
+}
+
+.resetSelection {
+    font-weight: 600;
+}
+
+.sorry {
+    margin: 0;
+}
+
+.dropdownOption, .resetSelection, .sorry {
+    position: relative;
+    padding: 10px 30px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.dropdownOption:hover, .resetSelection:hover {
+    background-color: #0366d6;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.selected {
+    position: absolute;
+    left: 10px;
+}
+
+.badge {
+    border-radius: 3px;
+    display: inline-block;
+    height: 14px;
+    margin-right: 5px;
+    margin-top: -2px;
+    vertical-align: middle;
+    width: 14px;
+}

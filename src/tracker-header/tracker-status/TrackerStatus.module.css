@@ -1,0 +1,17 @@
+.trackerStatus {
+    position: relative;
+    display: flex;
+    align-content: center;
+    line-height: 24px;
+    padding: 13px 15px 13px 40px;
+}
+
+.trackerStatus:hover {
+    cursor: pointer;
+}
+
+.icon {
+    position: absolute;
+    top: 17px;
+    left: 20px;
+}
