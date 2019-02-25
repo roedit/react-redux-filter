@@ -79,6 +79,23 @@ class TrackerFilter extends Component {
     }
 
     resetSelection() {
+        switch (this.props.title) {
+            case "projects": 
+            this.props.filterProjects([]);
+            break;
+            
+            case "assignee": 
+            this.props.filterAssignee([]);
+            break;
+            
+            case "categories": 
+            this.props.filterCategories([]);
+            break;
+
+            default:
+            break;
+        }
+
         this.setState(prevState => ({
             active: !prevState.active,
             list: this.props.data
