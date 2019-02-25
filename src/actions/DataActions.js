@@ -29,3 +29,13 @@ export const checkFilter = (item, filter) => {
         }
     }
 }
+
+export const searchTerm = (searchTerm, filter) => {
+    return {
+        type: 'SEARCH_TERM',
+        payload: {
+            searchTerm: searchTerm,
+            filter: filter
+        }
+    }
+}

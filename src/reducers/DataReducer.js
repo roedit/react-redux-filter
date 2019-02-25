@@ -120,6 +120,27 @@ export default function(state = initialState, action) {
             return fromJS(stateJS);
         }
 
+        case 'SEARCH_TERM': {
+            stateJS.projects = JSON.parse(JSON.stringify(projects));
+            stateJS.assignee = JSON.parse(JSON.stringify(assignee));
+            stateJS.categories = JSON.parse(JSON.stringify(categories));
+
+            let listFilter = stateJS.projects;
+            if(action.payload.filter === 'assignee') listFilter = stateJS.assignee;
+            if(action.payload.filter === 'categories') listFilter = stateJS.categories;
+
+            stateJS[action.payload.filter] = listFilter.filter(item => {
+                let hasTerm = item.label.indexOf(action.payload.searchTerm) !== -1;
+                let hasUpperCase = item.label.toUpperCase().indexOf(action.payload.searchTerm) !== -1;
+                let hasLowerCase = item.label.toLowerCase().indexOf(action.payload.searchTerm) !== -1;
+    
+                return hasTerm || hasUpperCase || hasLowerCase;
+            })
+            
+            return fromJS(stateJS);
+        }
+
+
         default: 
         return fromJS(stateJS);
     }

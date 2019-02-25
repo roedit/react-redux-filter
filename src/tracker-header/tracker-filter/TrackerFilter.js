@@ -3,21 +3,11 @@ import { connect } from 'react-redux';
 import Icon from '../../icons/Icon';
 import styles from './TrackerFilter.module.css';
 import {openFilter, closeFilter} from '../../actions/FilterActions';
-import {checkFilter, applyFilter} from '../../actions/DataActions';
+import {checkFilter, applyFilter, searchTerm} from '../../actions/DataActions';
 
 class TrackerFilter extends Component {
-    applyFilter(item) {
-        this.props.applyFilter(item, this.props.title);
-    }
-
     filterData(searchTerm) {
-        this.props[this.props.title].filter(item => {
-            let hasTerm = item.label.indexOf(searchTerm) !== -1;
-            let hasUpperCase = item.label.toUpperCase().indexOf(searchTerm) !== -1;
-            let hasLowerCase = item.label.toLowerCase().indexOf(searchTerm) !== -1;
-
-            return hasTerm || hasUpperCase || hasLowerCase;
-        })
+        this.props.searchTerm(searchTerm, this.props.title);
     }
 
     resetSelection() {
@@ -94,7 +84,7 @@ class TrackerFilter extends Component {
                     className={styles.dropdownOption}
                     onClick={() => {
                         this.props.checkFilter(item, this.props.title);
-                        this.applyFilter(item);
+                        this.props.applyFilter(item, this.props.title);
                     }}>
                     {item.color ? this.renderColor(item.color) : null}
                     {item.label}
@@ -167,6 +157,7 @@ const mapDispatchToProps = {
     openFilter: openFilter,
     closeFilter: closeFilter,
     applyFilter: applyFilter,
-    checkFilter: checkFilter
+    checkFilter: checkFilter, 
+    searchTerm: searchTerm
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerFilter);
