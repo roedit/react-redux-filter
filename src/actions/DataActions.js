@@ -10,23 +10,22 @@ export const filterClosed = () => {
     }
 }
 
-export const filterProjects = (payload) => {
+export const applyFilter = (item, filter) => {
     return {
-        type: 'PROJECTS_TERM_FILTER',
-        payload: payload
+        type: 'APPLY_FILTER',
+        payload: {
+            filter: filter,
+            item: item
+        }
     }
 }
 
-export const filterAssignee = (payload) => {
+export const checkFilter = (item, filter) => {
     return {
-        type: 'ASSIGNEE_TERM_FILTER',
-        payload: payload
-    }
-}
-
-export const filterCategories = (payload) => {
-    return {
-        type: 'CATEGORIES_TERM_FILTER',
-        payload: payload
+        type: 'CHECK_FILTER',
+        payload: {
+            item: item,
+            filter: filter
+        }
     }
 }

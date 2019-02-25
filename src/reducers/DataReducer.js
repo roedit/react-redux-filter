@@ -93,23 +93,29 @@ export default function(state = initialState, action) {
             return fromJS(stateJS);
         }
 
-        case 'PROJECTS_TERM_FILTER': {
-            stateJS.projectsFilterTerms = action.payload
+        case 'APPLY_FILTER': {
+            let filters = stateJS.projectsFilterTerms
+            if(action.payload.filter === 'assignee') filters = stateJS.assigneeFilterTerms;
+            if(action.payload.filter === 'categories') filters = stateJS.categoriesFilterTerms;
+
+            let itemIndex = filters.indexOf(action.payload.item.label)
+            itemIndex === -1 ? filters.push(action.payload.item.label) : filters.splice(itemIndex, 1)
+            
             stateJS.tickets = filterData(stateJS);
 
             return fromJS(stateJS);
         }
 
-        case 'ASSIGNEE_TERM_FILTER': {
-            stateJS.assigneeFilterTerms = action.payload
-            stateJS.tickets = filterData(stateJS);
+        case 'CHECK_FILTER': {
+            let listFilter = stateJS.projects;
+            if(action.payload.filter === 'assignee') listFilter = stateJS.assignee;
+            if(action.payload.filter === 'categories') listFilter = stateJS.categories;
 
-            return fromJS(stateJS);
-        }
-
-        case 'CATEGORIES_TERM_FILTER': {
-            stateJS.categoriesFilterTerms = action.payload
-            stateJS.tickets = filterData(stateJS);
+            listFilter.forEach(item => {
+                if(item.label === action.payload.item.label) {
+                    item.checked = !item.checked
+                }
+            })
 
             return fromJS(stateJS);
         }

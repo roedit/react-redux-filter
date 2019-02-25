@@ -4,42 +4,62 @@ const initialState = fromJS({
     projects: false,
     assignee: false,
     categories: false
-    
 })
+
+function closeFilter(state) {
+    state.projects = false;
+    state.assignee = false;
+    state.categories = false;
+
+    return state;
+}
+
 export default function(state = initialState, action) {
     let stateJS = state.toJS()
 
     switch (action.type) {
-        case 'PROJECTS_FILTER': {
-            stateJS.assignee = false;
-            stateJS.categories = false;
-            stateJS.projects = true;
+        case 'OPEN_FILTER': {
+            switch (action.payload.filter) {
+                case "projects": 
+                if(stateJS.projects) {
+                    return fromJS(closeFilter(stateJS));
+                }
 
-            return fromJS(stateJS);
-        }
+                stateJS.assignee = false;
+                stateJS.categories = false;
+                stateJS.projects = true;
+                break;
+                
+                case "assignee": 
+                if(stateJS.assignee) {
+                    return fromJS(closeFilter(stateJS));
+                }
 
-        case 'ASSIGNEE_FILTER': {
-            stateJS.projects = false;
-            stateJS.categories = false;
-            stateJS.assignee = true;
+                stateJS.assignee = true;
+                stateJS.categories = false;
+                stateJS.projects = false;
+                break;
+                
+                case "categories": 
+                if(stateJS.assignee) {
+                    return fromJS(closeFilter(stateJS));
+                }
 
-            return fromJS(stateJS);
-        }
-
-        case 'CATEGORIES_FILTER': {
-            stateJS.assignee = false;
-            stateJS.projects = false;
-            stateJS.categories = true;
-
+                stateJS.assignee = false;
+                stateJS.categories = true;
+                stateJS.projects = false;
+                break;
+    
+                default:
+                this.props.closeFilter();
+                break;
+            }
+            
             return fromJS(stateJS);
         }
 
         case 'CLOSE_FILTER': {
-            stateJS.assignee = false;
-            stateJS.projects = false;
-            stateJS.categories = false;
-
-            return fromJS(stateJS);
+            return fromJS(closeFilter(stateJS));
         }
 
         default: 

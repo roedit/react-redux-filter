@@ -2,83 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Icon from '../../icons/Icon';
 import styles from './TrackerFilter.module.css';
-import {openProjectsFilter, openAssigneeFilter, openCategoriesFilter, closeFilter} from '../../actions/FilterActions';
-import {filterProjects, filterAssignee, filterCategories} from '../../actions/DataActions';
+import {openFilter, closeFilter} from '../../actions/FilterActions';
+import {checkFilter, applyFilter} from '../../actions/DataActions';
 
 class TrackerFilter extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state= {
-            list: JSON.parse(JSON.stringify(props.data))
-        }
-    }
-
-    toggleFilter() {
-        console.log(this.props);
-        switch (this.props.title) {
-            case "projects": 
-            this.props.filters.projects ? this.props.closeFilter() : this.props.openProjects();
-            break;
-            
-            case "assignee": 
-            this.props.filters.assignee ? this.props.closeFilter() : this.props.openAssignee();
-            break;
-            
-            case "categories": 
-            this.props.filters.categories ? this.props.closeFilter() : this.props.openCategories();
-            break;
-
-            default:
-            this.props.closeFilter();
-            break;
-        }
-    }
-
     applyFilter(item) {
-        switch (this.props.title) {
-            case "projects": 
-            let filtersProject = JSON.parse(JSON.stringify(this.props.projectFilters))
-            let itemIndexProject = filtersProject.indexOf(item.label)
-            itemIndexProject === -1 ? filtersProject.push(item.label) : filtersProject.splice(itemIndexProject, 1)
-            
-            this.props.filterProjects(filtersProject);
-            break;
-            
-            case "assignee": 
-            let filtersAssignee = JSON.parse(JSON.stringify(this.props.assigneeFilters))
-            let itemIndexAssignee = filtersAssignee.indexOf(item.label)
-            itemIndexAssignee === -1 ? filtersAssignee.push(item.label) : filtersAssignee.splice(itemIndexAssignee, 1)
-            
-            this.props.filterAssignee(filtersAssignee);
-            break;
-            
-            case "categories": 
-            let filtersCategories = JSON.parse(JSON.stringify(this.props.categoriesFilters))
-            let itemIndexCategories = filtersCategories.indexOf(item.label)
-            itemIndexCategories === -1 ? filtersCategories.push(item.label) : filtersCategories.splice(itemIndexCategories, 1)
-            
-            this.props.filterCategories(filtersCategories);
-            break;
-
-            default:
-            break;
-        }
-
-        this.setState(prevState => ({
-            list: this.props.data
-        }))
+        this.props.applyFilter(item, this.props.title);
     }
 
     filterData(searchTerm) {
-        this.setState({
-            list: this.props.data.filter(item => {
-                let hasTerm = item.label.indexOf(searchTerm) !== -1;
-                let hasUpperCase = item.label.toUpperCase().indexOf(searchTerm) !== -1;
-                let hasLowerCase = item.label.toLowerCase().indexOf(searchTerm) !== -1;
+        this.props[this.props.title].filter(item => {
+            let hasTerm = item.label.indexOf(searchTerm) !== -1;
+            let hasUpperCase = item.label.toUpperCase().indexOf(searchTerm) !== -1;
+            let hasLowerCase = item.label.toLowerCase().indexOf(searchTerm) !== -1;
 
-                return hasTerm || hasUpperCase || hasLowerCase;
-            })
+            return hasTerm || hasUpperCase || hasLowerCase;
         })
     }
 
@@ -99,10 +37,6 @@ class TrackerFilter extends Component {
             default:
             break;
         }
-
-        this.setState(prevState => ({
-            list: this.props.data
-        }))
     }
 
     renderOptions() {
@@ -117,7 +51,11 @@ class TrackerFilter extends Component {
                         onClick={() => this.resetSelection}>
                         Filter by {this.props.title.toLowerCase()}
                     </h4>
-                    <Icon className={styles.close} onClick={() => this.props.closeFilter()}
+                    <Icon className={styles.close} 
+                          onClick={e => {
+                            this.props.closeFilter();
+                            e.stopPropagation()
+                          }}
                           name="close"
                           color="black"
                           size="small"/>
@@ -142,7 +80,7 @@ class TrackerFilter extends Component {
     renderProps() {
         let options = [];
 
-        if(this.state.list.length > 0) {
+        if(this.props[this.props.title].length > 0) {
             options.push(
                 <li key={`${this.props.title.toLowerCase()}-reset`}
                     className={styles.resetSelection}
@@ -151,11 +89,11 @@ class TrackerFilter extends Component {
                 </li>
             )
 
-            this.state.list.forEach((item, i) => options.push(
+            this.props[this.props.title].forEach((item, i) => options.push(
                 <li key={`${this.props.title.toLowerCase()}-${i}`}
                     className={styles.dropdownOption}
                     onClick={() => {
-                        item.checked = !item.checked;
+                        this.props.checkFilter(item, this.props.title);
                         this.applyFilter(item);
                     }}>
                     {item.color ? this.renderColor(item.color) : null}
@@ -200,7 +138,7 @@ class TrackerFilter extends Component {
     render() {
         return (
             <div className={styles.trackerFilter}
-                 onClick={() => this.toggleFilter()}>
+                 onClick={() => this.props.openFilter(this.props.title)}>
                 <div className={styles.filterLabel}>
                     {this.props.title}
                     <Icon name="arrowDown"
@@ -214,22 +152,21 @@ class TrackerFilter extends Component {
 }
 
 const mapStateToProps = (state) => {
-    
     return {
         filters: state.filters.toJS(),
         projectFilters: state.data.toJS().projectsFilterTerms,
         assigneeFilters: state.data.toJS().assigneeFilterTerms,
-        categoriesFilters: state.data.toJS().categoriesFilterTerms
+        categoriesFilters: state.data.toJS().categoriesFilterTerms,
+        projects: state.data.toJS().projects,
+        categories: state.data.toJS().categories,
+        assignee: state.data.toJS().assignee,
     }
 }
 
 const mapDispatchToProps = {
-    openProjects: openProjectsFilter,
-    openAssignee: openAssigneeFilter,
-    openCategories: openCategoriesFilter,
+    openFilter: openFilter,
     closeFilter: closeFilter,
-    filterProjects: filterProjects,
-    filterAssignee: filterAssignee,
-    filterCategories: filterCategories
+    applyFilter: applyFilter,
+    checkFilter: checkFilter
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerFilter);

@@ -1,18 +1,9 @@
-export const openProjectsFilter = () => {
+export const openFilter = (filter) => {
     return {
-        type: 'PROJECTS_FILTER'
-    }
-}
-
-export const openAssigneeFilter = () => {
-    return {
-        type: 'ASSIGNEE_FILTER'
-    }
-}
-
-export const openCategoriesFilter = () => {
-    return {
-        type: 'CATEGORIES_FILTER'
+        type: 'OPEN_FILTER',
+        payload: {
+            filter: filter
+        }
     }
 }
 
