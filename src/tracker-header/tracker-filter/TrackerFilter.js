@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Icon from '../../icons/Icon';
 import styles from './TrackerFilter.module.css';
 import {openFilter, closeFilter} from '../../actions/FilterActions';
-import {checkFilter, applyFilter} from '../../actions/DataActions';
+import {checkFilter, applyFilter, resetFilter} from '../../actions/DataActions';
 
 class TrackerFilter extends Component {
     constructor(props) {
@@ -35,25 +35,6 @@ class TrackerFilter extends Component {
       })
     }
 
-    resetSelection() {
-        switch (this.props.title) {
-            case "projects":
-            this.props.filterProjects([]);
-            break;
-
-            case "assignee":
-            this.props.filterAssignee([]);
-            break;
-
-            case "categories":
-            this.props.filterCategories([]);
-            break;
-
-            default:
-            break;
-        }
-    }
-
     renderOptions() {
         if(!this.props.filters[this.props.title]) {
             return null;
@@ -63,7 +44,7 @@ class TrackerFilter extends Component {
             <ul className={styles.dropdown}>
                 <div className={styles.dropdownTitleHolder}>
                     <h4 className={styles.dropdownTitle}
-                        onClick={() => this.resetSelection}>
+                        onClick={() => this.props.resetFilter(this.props.title)}>
                         Filter by {this.props.title.toLowerCase()}
                     </h4>
                     <Icon className={styles.close}
@@ -99,7 +80,7 @@ class TrackerFilter extends Component {
             options.push(
                 <li key={`${this.props.title.toLowerCase()}-reset`}
                     className={styles.resetSelection}
-                    onClick={() => this.resetSelection()}>
+                    onClick={() => this.props.resetFilter(this.props.title)}>
                     Reset selection
                 </li>
             )
@@ -113,7 +94,6 @@ class TrackerFilter extends Component {
                     }}>
                     {item.color ? this.renderColor(item.color) : null}
                     {item.label}
-                  {console.log(item)}
                     {item.checked ? this.renderSelected() : null}
                 </li>
             ))
@@ -183,6 +163,7 @@ const mapDispatchToProps = {
     openFilter: openFilter,
     closeFilter: closeFilter,
     applyFilter: applyFilter,
+    resetFilter: resetFilter,
     checkFilter: checkFilter
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerFilter);

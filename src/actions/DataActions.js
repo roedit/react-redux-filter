@@ -20,6 +20,15 @@ export const applyFilter = (item, filter) => {
     }
 }
 
+export const resetFilter = (filter) => {
+    return {
+        type: 'RESET_FILTER',
+        payload: {
+            filter: filter
+        }
+    }
+}
+
 export const checkFilter = (item, filter) => {
     return {
         type: 'CHECK_FILTER',

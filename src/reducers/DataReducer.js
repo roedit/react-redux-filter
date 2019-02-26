@@ -106,6 +106,26 @@ export default function(state = initialState, action) {
             return fromJS(stateJS);
         }
 
+        case 'RESET_FILTER': {
+          let filters = stateJS.projectsFilterTerms
+          if(action.payload.filter === 'assignee') filters = stateJS.assigneeFilterTerms;
+          if(action.payload.filter === 'categories') filters = stateJS.categoriesFilterTerms;
+
+          let listFilter = stateJS.projects;
+          if(action.payload.filter === 'assignee') listFilter = stateJS.assignee;
+          if(action.payload.filter === 'categories') listFilter = stateJS.categories;
+
+          listFilter.forEach(item => {
+            item.checked = false;
+          })
+
+          filters.splice(0, filters.length);
+
+          stateJS.tickets = filterData(stateJS);
+
+          return fromJS(stateJS);
+        }
+
         case 'CHECK_FILTER': {
             let listFilter = stateJS.projects;
             if(action.payload.filter === 'assignee') listFilter = stateJS.assignee;
