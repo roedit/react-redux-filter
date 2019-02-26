@@ -1,26 +1,51 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Icon from '../../icons/Icon';
 import styles from './TrackerFilter.module.css';
 import {openFilter, closeFilter} from '../../actions/FilterActions';
-import {checkFilter, applyFilter, searchTerm} from '../../actions/DataActions';
+import {checkFilter, applyFilter} from '../../actions/DataActions';
 
 class TrackerFilter extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            list: JSON.parse(JSON.stringify(this.props[this.props.title]))
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+      if (!_.isEqual(prevProps[this.props.title], this.props[this.props.title])) {
+        this.setState({
+          list: JSON.parse(JSON.stringify(this.props[this.props.title]))
+        })
+      }
+    }
+
     filterData(searchTerm) {
-        this.props.searchTerm(searchTerm, this.props.title);
+      this.setState({
+        list: this.props[this.props.title].filter(item => {
+          let hasTerm = item.label.indexOf(searchTerm) !== -1;
+          let hasUpperCase = item.label.toUpperCase().indexOf(searchTerm) !== -1;
+          let hasLowerCase = item.label.toLowerCase().indexOf(searchTerm) !== -1;
+
+          return hasTerm || hasUpperCase || hasLowerCase;
+        })
+      })
     }
 
     resetSelection() {
         switch (this.props.title) {
-            case "projects": 
+            case "projects":
             this.props.filterProjects([]);
             break;
-            
-            case "assignee": 
+
+            case "assignee":
             this.props.filterAssignee([]);
             break;
-            
-            case "categories": 
+
+            case "categories":
             this.props.filterCategories([]);
             break;
 
@@ -41,7 +66,7 @@ class TrackerFilter extends Component {
                         onClick={() => this.resetSelection}>
                         Filter by {this.props.title.toLowerCase()}
                     </h4>
-                    <Icon className={styles.close} 
+                    <Icon className={styles.close}
                           onClick={e => {
                             this.props.closeFilter();
                             e.stopPropagation()
@@ -70,7 +95,7 @@ class TrackerFilter extends Component {
     renderProps() {
         let options = [];
 
-        if(this.props[this.props.title].length > 0) {
+        if(this.state.list.length > 0) {
             options.push(
                 <li key={`${this.props.title.toLowerCase()}-reset`}
                     className={styles.resetSelection}
@@ -79,7 +104,7 @@ class TrackerFilter extends Component {
                 </li>
             )
 
-            this.props[this.props.title].forEach((item, i) => options.push(
+            this.state.list.forEach((item, i) => options.push(
                 <li key={`${this.props.title.toLowerCase()}-${i}`}
                     className={styles.dropdownOption}
                     onClick={() => {
@@ -88,6 +113,7 @@ class TrackerFilter extends Component {
                     }}>
                     {item.color ? this.renderColor(item.color) : null}
                     {item.label}
+                  {console.log(item)}
                     {item.checked ? this.renderSelected() : null}
                 </li>
             ))
@@ -157,7 +183,6 @@ const mapDispatchToProps = {
     openFilter: openFilter,
     closeFilter: closeFilter,
     applyFilter: applyFilter,
-    checkFilter: checkFilter, 
-    searchTerm: searchTerm
+    checkFilter: checkFilter
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TrackerFilter);

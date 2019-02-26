@@ -1,12 +1,12 @@
 export const filterOpened = () => {
     return {
-        type: 'OPENED_FILTER'
+        type: 'OPENED_TICKETS'
     }
 }
 
 export const filterClosed = () => {
     return {
-        type: 'CLOSED_FILTER'
+        type: 'CLOSED_TICKETS'
     }
 }
 
@@ -25,16 +25,6 @@ export const checkFilter = (item, filter) => {
         type: 'CHECK_FILTER',
         payload: {
             item: item,
-            filter: filter
-        }
-    }
-}
-
-export const searchTerm = (searchTerm, filter) => {
-    return {
-        type: 'SEARCH_TERM',
-        payload: {
-            searchTerm: searchTerm,
             filter: filter
         }
     }

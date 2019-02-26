@@ -77,7 +77,7 @@ export default function(state = initialState, action) {
     let filteredData = JSON.parse(JSON.stringify(data));
 
     switch (action.type) {
-        case 'OPENED_FILTER': {
+        case 'OPENED_TICKETS': {
             stateJS.opened ? stateJS.tickets = filteredData : 
             stateJS.tickets = filteredData.filter(ticket => ticket.status === 'opened')
             stateJS.opened = !stateJS.opened;
@@ -85,7 +85,7 @@ export default function(state = initialState, action) {
             return fromJS(stateJS);
         }
 
-        case 'CLOSED_FILTER': {
+        case 'CLOSED_TICKETS': {
             stateJS.closed ? stateJS.tickets = filteredData : 
             stateJS.tickets = filteredData.filter(ticket => ticket.status === 'closed')
             stateJS.closed = !stateJS.closed;
@@ -117,26 +117,6 @@ export default function(state = initialState, action) {
                 }
             })
 
-            return fromJS(stateJS);
-        }
-
-        case 'SEARCH_TERM': {
-            stateJS.projects = JSON.parse(JSON.stringify(projects));
-            stateJS.assignee = JSON.parse(JSON.stringify(assignee));
-            stateJS.categories = JSON.parse(JSON.stringify(categories));
-
-            let listFilter = stateJS.projects;
-            if(action.payload.filter === 'assignee') listFilter = stateJS.assignee;
-            if(action.payload.filter === 'categories') listFilter = stateJS.categories;
-
-            stateJS[action.payload.filter] = listFilter.filter(item => {
-                let hasTerm = item.label.indexOf(action.payload.searchTerm) !== -1;
-                let hasUpperCase = item.label.toUpperCase().indexOf(action.payload.searchTerm) !== -1;
-                let hasLowerCase = item.label.toLowerCase().indexOf(action.payload.searchTerm) !== -1;
-    
-                return hasTerm || hasUpperCase || hasLowerCase;
-            })
-            
             return fromJS(stateJS);
         }
 
